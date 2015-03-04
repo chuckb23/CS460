@@ -1,0 +1,12 @@
+echo comiling ......
+as86 -o bs.o  bs.s  
+bcc  -c -ansi t.c
+  
+echo linking .......
+ld86 -d bs.o  t.o  /usr/lib/bcc/libc.a
+echo check a.out size
+ls -l a.out
+     
+echo dump a.out to a VIRTUAL FD
+dd if=a.out of=mtximage bs=1024 count=1 conv=notrunc
+qemu -fda mtximage -no-fd-bootchk
