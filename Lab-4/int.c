@@ -5,11 +5,11 @@
  |uds|ues|udi|usi|ubp|udx|ucx|ubx|uax|upc|ucs|uflag|retPC| a | b | c | d |
 ----------------------------------------------------------------------------
 ***************************************************************************/
-#define PA 13
-#define PB 14
-#define PC 15
-#define PD 16
-#define AX  8
+#define PA 9
+#define PB 10
+#define PC 11
+#define PD 12
+#define AX  4
 
 /****************** syscall handler in C ***************************/
 int kcinth()
