@@ -9,7 +9,7 @@
 start:	mov  ax,cs
 	mov  ds,ax
 	mov  ss,ax
-        mov  es,ax
+  mov  es,ax
 	mov  sp,#_proc
 	add  sp,_procSize
 		
