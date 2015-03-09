@@ -20,7 +20,7 @@ PROC *kfork(char *filename)
 {
   PROC *p;
   int  i, child;
-  u16  segment;
+  u16  segment,segsize;
 
   /*** get a PROC for child process: ***/
   if ( (p = get_proc(&freeList)) == 0){
@@ -49,7 +49,7 @@ PROC *kfork(char *filename)
 
      segment = 0x1000*(p->pid+1);  // new PROC's segment
      load(filename, segment);      // load file to LOW END of segment
-
+			segsize = 0x800;
      /********** ustack contents at HIGH END of ustack[ ] ************
         PROC.usp
        -----|------------------------------------------------
@@ -58,19 +58,19 @@ PROC *kfork(char *filename)
            -12 -11 -10 -9  -8  -7  -6  -5  -4  -3  -2   -1
      *****************************************************************/
 
-     for (i=1; i<=12; i++){         // write 0's to ALL of them
-         put_word(0, segment, -2*i);
+     for (i=1; i<=8; i++){         // write 0's to ALL of them
+         put_word(0, segment, (-2*i-segsize));
      }
      
-     put_word(0x0200,   segment, -2*1);   /* flag */  
-     put_word(segment,  segment, -2*2);   /* uCS */  
-     put_word(segment,  segment, -2*11);  /* uES */  
-     put_word(segment,  segment, -2*12);  /* uDS */  
+     put_word(0x0200,   segment, (-2*1-segsize));   /* flag */  
+     put_word(segment,  segment, (-2*2-segsize));   /* uCS */  
+     put_word(segment,  segment, (-2*7-segsize));  /* uES */  
+     put_word(segment,  segment, (-2*8-segsize));  /* uDS */  
 
      // YOU WRITE CODE TO FILL IN uDS, uES, uCS
 
      /* initial USP relative to USS */
-     p->usp = -2*12; 
+     p->usp = (-2*8-segsize); 
      p->uss = segment;
   }
 

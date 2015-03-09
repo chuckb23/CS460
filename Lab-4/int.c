@@ -5,11 +5,11 @@
  |uds|ues|udi|usi|ubp|udx|ucx|ubx|uax|upc|ucs|uflag|retPC| a | b | c | d |
 ----------------------------------------------------------------------------
 ***************************************************************************/
-#define PA 13
-#define PB 14
-#define PC 15
-#define PD 16
-#define AX  8
+#define PA 9
+#define PB 10
+#define PC 11
+#define PD 12
+#define AX  4
 
 /****************** syscall handler in C ***************************/
 int kcinth()
@@ -18,7 +18,7 @@ int kcinth()
    int    a,b,c,d, r;
    segment = running->uss; 
    offset = running->usp;
-
+	//printf("offset: %d\n",offset);
    /** get syscall parameters from ustack **/
    a = get_word(segment, offset + 2*PA);
    b = get_word(segment, offset + 2*PB);
@@ -33,7 +33,8 @@ int kcinth()
        case 4 : r = ktswitch();       break;
        case 5 : r = kkwait(b);        break;
        case 6 : r = kkexit(b);        break;
-
+			 case 7 : r = getMyname(b);			break;
+			 case 8 : r = khop(b);					break;
    case 90: r = getc();               break;
    case 91: r = putc(b);              break;
 
@@ -104,6 +105,54 @@ int kchname(char * y)
   printf("changing name of proc %d to %s\n", running->pid, buf);
   strcpy(running->name, buf); 
   printf("done\n");
+}
+int getMyname(char myname[64])
+{
+	int i;
+	//char buf[64];
+	char *p;
+	i =0;
+	strcpy(myname,running->name);
+	p = myname;
+	while(*p!=0){
+		i++;
+		p++;
+		}
+	printf("Name is %s which is %d characters long\n", myname, i);
+	return i;
+}
+int copy_image(u16 childsegment){
+	u16 end,offset;
+	int word;
+	end = 0x1000;
+	offset = 0;
+	while(offset<end)
+	{
+	word = get_word(running->uss,offset);
+	put_word(word, childsegment,offset);
+	offset+=1;
+		}
+	return 1;
+}
+int khop(u16 newsegment){
+	u16 segsize;
+	segsize = 0x800; 
+	copy_image(newsegment);
+	 put_word(0x0200,   newsegment, -2*1);   /* flag */  
+   put_word(newsegment,  newsegment, (-2*2-segsize));   /* uCS */  
+   put_word(newsegment,  newsegment, (-2*7-segsize));  /* uES */  
+   put_word(newsegment,  newsegment, (-2*8-segsize));  /* uDS */
+		running->usp = -2*8-segsize;
+	printf("Newseg %x",newsegment);
+	//printf("\nOffset %u",offset);
+	//running->uss = newsegment;
+	printf("\nSegment %x",running->uss);
+	//running->usp = -2*8;
+	printf("\nSegment %x",running->usp);
+	running->uss = newsegment;
+	//goUmode();
+	printf("\nSegment %x",running->uss);
+	return 1;
 }
 
 int kps()

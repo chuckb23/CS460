@@ -26,7 +26,8 @@ main()
            case 4 : kswitch();  break;
            case 5 : wait();     break;
            case 6 : exit();     break;
-
+					 case 7 : myName();		break;
+					 case 8 : hop();			break;
            default: invalid(name); break;
     }
   }

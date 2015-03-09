@@ -1,13 +1,13 @@
 // ucode.c file
 
-char *cmd[]={"getpid", "ps", "chname", "kfork", "switch", "wait", "exit", 0};
+char *cmd[]={"getpid", "ps", "chname", "kfork", "switch", "wait", "exit", "name", "hop", 0};
 
 #define LEN 64
 
 int show_menu()
 {
    printf("***************** Menu *******************\n");
-   printf("*  ps  chname  kfork  switch  wait  exit *\n");
+   printf("*  ps  chname  kfork  switch  wait  exit name hop *\n");
    printf("******************************************\n");
 }
 
@@ -33,6 +33,25 @@ int getpid()
 int ps()
 {
    syscall(1, 0, 0);
+}
+
+int myName(){
+	int length;
+	char v[64];
+	syscall(7,v,0);
+	//printf("\n%s\n",v);
+}
+
+int hop(){
+	unsigned short s;
+	unsigned short newseg;
+	printf("Enter a new segment:");
+	s = getc();
+	putc(s);
+	newseg = s*0X1000;
+	syscall(8,newseg,0);
+	printf("syscall returns\n");
+	return 1;
 }
 
 int chname()

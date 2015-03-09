@@ -1,1 +1,1 @@
-qemu -fda mtxsol -no-fd-bootchk
+qemu -fda mtximage -no-fd-bootchk
