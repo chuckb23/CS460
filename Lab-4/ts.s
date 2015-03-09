@@ -5,12 +5,10 @@ auto_start:
 	
        .globl _main,_running,_scheduler
        .globl _proc, _procSize
-<<<<<<< HEAD
        .globl _tswitch,_goUmode
-	
-=======
+
        .globl _tswitch
->>>>>>> babb82379154ac04fd01b73c803b8a9ad291ce06
+
         jmpi   start,MTXSEG
 
 start:	mov  ax,cs
@@ -88,23 +86,14 @@ _int80h:
   
 _goUmode:
         cli
-				mov bx,_running 	! bx -> proc
-<<<<<<< HEAD
+	mov bx,_running 	! bx -> proc
+
         mov ax,USS[bx]
         mov ss,ax               ! restore uSS
         mov sp,USP[bx]          ! restore uSP
-  
-				pop ds
-				pop es
-	      pop bp
-=======
-        mov ax,4[bx]
-        mov ss,ax               ! restore uSS
-        mov sp,6[bx]          ! restore uSP
-				pop ds
-				pop es
+	pop ds
+	pop es
         pop bp
->>>>>>> babb82379154ac04fd01b73c803b8a9ad291ce06
         pop bx
         pop ax             
         iret
