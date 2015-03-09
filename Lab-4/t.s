@@ -5,13 +5,11 @@ auto_start:
 	
        .globl _main,_running,_scheduler
        .globl _proc, _procSize
-<<<<<<< HEAD
-       .globl _tswitch,_goUmode
-	
-=======
        .globl _tswitch
->>>>>>> babb82379154ac04fd01b73c803b8a9ad291ce06
+			 
         jmpi   start,MTXSEG
+
+
 
 start:	mov  ax,cs
 	mov  ds,ax
@@ -55,22 +53,25 @@ RESUME:
 ! added functions for KUMODE
 	.globl _int80h,_goUmode,_kcinth
 !These offsets are defined in struct proc
-USS =  4
-USP =  6
-
+USS =   4
+USP =   6
 
 _int80h:
-        push ax                 ! save SOME Umode registers in ustack
+        push ax                 ! save all Umode registers in ustack
         push bx
+        push cx
+        push dx
         push bp
+        push si
+        push di
         push es
         push ds
 
-! ustack contains : flag,uCS,uPC, ax,bp,ues,uds
+! ustack contains : flag,uCS,uPC, ax,bx,cx,dx,bp,si,di,ues,uds
         push cs
         pop  ds                 ! KDS now
 
-				mov bx,_running  	! ready to access proc
+	mov bx,_running  	! ready to access proc
         mov USS[bx],ss          ! save uSS  in proc.USS
         mov USP[bx],sp          ! save uSP  in proc.USP
 
@@ -80,7 +81,7 @@ _int80h:
         mov  ss,ax
 
 ! set sp to HI end of running's kstack[]
-				mov  sp,_running        ! proc's kstack [2 KB]
+	mov  sp,_running        ! proc's kstack [2 KB]
         add  sp,_procSize       ! HI end of PROC
 
         call  _kcinth
@@ -89,22 +90,22 @@ _int80h:
 _goUmode:
         cli
 				mov bx,_running 	! bx -> proc
-<<<<<<< HEAD
         mov ax,USS[bx]
         mov ss,ax               ! restore uSS
         mov sp,USP[bx]          ! restore uSP
-  
+  			!call _printStack
 				pop ds
 				pop es
-	      pop bp
-=======
-        mov ax,4[bx]
-        mov ss,ax               ! restore uSS
-        mov sp,6[bx]          ! restore uSP
-				pop ds
-				pop es
+				pop di
+				!call _printStack
+        pop si
         pop bp
->>>>>>> babb82379154ac04fd01b73c803b8a9ad291ce06
+        pop dx
+        pop cx
         pop bx
-        pop ax             
+        pop ax                  ! NOTE: contains return value to Umode     
+				
+	
         iret
+
+	

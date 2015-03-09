@@ -43,7 +43,7 @@ PROC *kfork(char *filename)
   p->ksp = &(p->kstack[SSIZE - 9]);
 
   enqueue(&readyQueue, p);
-
+	//ss = (unsigned short) 0x1000;
   nproc++;
   if (filename){
 
@@ -59,6 +59,7 @@ PROC *kfork(char *filename)
      *****************************************************************/
 
      for (i=1; i<=8; i++){         // write 0's to ALL of them
+<<<<<<< HEAD
          put_word(0, segment, (-2*i-segsize));
      }
      
@@ -66,18 +67,35 @@ PROC *kfork(char *filename)
      put_word(segment,  segment, (-2*2-segsize));   /* uCS */  
      put_word(segment,  segment, (-2*7-segsize));  /* uES */  
      put_word(segment,  segment, (-2*8-segsize));  /* uDS */  
+=======
+         put_word(0, segment, -2*i);
+     }
+     
+     put_word(0x0200,   segment, -2*1);   /* flag */  
+     put_word(segment,  segment, -2*2);   /* uCS */ 
+     put_word(segment,  segment, -2*7);  /* uES */  
+     put_word(segment,  segment, -2*8);  /* uDS */  
+>>>>>>> babb82379154ac04fd01b73c803b8a9ad291ce06
 
      // YOU WRITE CODE TO FILL IN uDS, uES, uCS
 
      /* initial USP relative to USS */
+<<<<<<< HEAD
      p->usp = (-2*8-segsize); 
      p->uss = segment;
+=======
+		 p->usp = -2*8; 
+		 p->uss = segment;
+     
+     
+>>>>>>> babb82379154ac04fd01b73c803b8a9ad291ce06
   }
 
   printf("Proc %d kforked a child %d at segment=%x\n",
           running->pid, p->pid, segment);
   return p;
 }
+
 
 int init()
 {
