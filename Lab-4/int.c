@@ -8,7 +8,7 @@
 #define PA 9
 #define PB 10
 #define PC 11
-#define PD 12
+#define PD 13
 #define AX  4
 
 /****************** syscall handler in C ***************************/
@@ -73,7 +73,7 @@ int do_ps()
            if (running==&proc[i])
               prints("running");
            else
-              prints(hh[proc[i].status]);
+              prints(proc[i].status);
            prints("     ");
            printd(proc[i].pid);  prints("        ");
            printd(proc[i].ppid);
