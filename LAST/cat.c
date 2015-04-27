@@ -11,7 +11,8 @@ int main(int argc,char * argv[]){
 	else{
 
 		fd = open(argv[1],O_RDONLY);
-		printf("We are going to  Cat %d",fd);
+	//	printf("We are going to  Cat %d",fd);
+	//	getc();
 	}
 	if(fd>=0){
 		while(numread = read(fd,&buf,1)){

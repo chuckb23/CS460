@@ -22,7 +22,7 @@ main(int argc, char *argv[])   // invoked by exec("login /dev/ttyxx")
   settty(tty);   // store tty string in PROC.tty[] for putc()
 
   // NOW we can use printf, which calls putc() to our tty
-  printf("KCLOGIN : open %s as stdin, stdout, stderr\n", tty);
+  printf("Chucks LOGIN : open %s as stdin, stdout, stderr\n", tty);
 
   signal(2,1);  // ignore Control-C interrupts so that 
                 // Control-C KILLs other procs on this tty but not the main sh
