@@ -64,11 +64,11 @@ main(int argc, char *argv[])   // invoked by exec("login /dev/ttyxx")
    		switch(j){
    			case 0:
    				suname = getUsers;
-   				printf("username:(%s)\n",suname );
+   				//printf("username:(%s)\n",suname );
    				break;
    			case 1:
    				spwd = getUsers;
-   				printf("password:(%s)\n",spwd );
+   				//printf("password:(%s)\n",spwd );
    				break;
    			case 2:
    				gid = atoi(getUsers);

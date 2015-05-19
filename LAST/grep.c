@@ -10,7 +10,7 @@ int main(int argc, char * argv[]){
 		fd=0;
 	}
 	else{
-		printf("File to grep is %s\n",argv[2]);
+		//printf("File to grep is %s\n",argv[2]);
 		fd = open(argv[2], O_RDONLY);
 	}
 	if(fd>-1){
@@ -45,7 +45,7 @@ int grepLine(char *buf, char *pattern){
 		}
 		else{
 			//matching
-			printf("Match\n");
+		//	printf("Match\n");
 			gbeg = i;
 			i++;
 			j++;

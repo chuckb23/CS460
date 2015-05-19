@@ -15,22 +15,11 @@ int main(int argc, char *argv[]){
 			exit(&command);
 			//syscall to die
 		}
+		//if(strcmp(command))
 
 		//one command
 		cmdCount = getPipes();
-		if(cmdCount==1){
-			printf("Executing %s\n",command);
-			getc();
-			pid = fork();
-			printf("D1\n");
-			if(pid==0){
-				fileIO(command);
-				//exec(cmdList[0]);
-			}
-			else{
-				pid = wait(&status);
-			}
-		} else if(cmdCount>1){
+		if(cmdCount){
 			//printf("Executing multiple %s\n",command);
 			//getc();
 			pid = fork();
@@ -41,12 +30,14 @@ int main(int argc, char *argv[]){
 				//getc();
 				//setPipes();
 				fileIO(command);
+				//chuckexec(command);
 				//printf("D3 command is %s\n",cmdList[cmdCount-1]);
 			    //getc();
 				//exec(cmdList[cmdCount-1]);
 				//pipe each cmd
 			}else{
 				pid = wait(&status);
+				//wait(&status);
 			}
 		} else{
 			printf("Error: %s is not a valid command\n",command);
@@ -62,11 +53,11 @@ int getPipes(){
 	pipes = strtok(tmp," ");
 	while(pipes){
 		cmdList[pipeNum++] = pipes;
-		printf("CMD: %s\n",cmdList[0]);
+		//printf("CMD: %s\n",cmdList[0]);
 		pipes = strtok(0," ");
 	}
 
-	gets();
+	//gets();
 	cmdList[pipeNum]='\0';
 	return pipeNum;
 }
@@ -154,21 +145,23 @@ int fileIO(char * cmd){
 			}else if(*cmdList[i] == '<'){
 				fileOp = 2;
 				fileName = cmdList[++i];
+				close(0);
 				fdf = open(fileName,O_RDONLY);
-				if(fdf>-1){
+				/*if(fdf>-1){
 					//*(cmdList-1)='\0';
 					dup2(fdf,0);
+					close(fdf);
 				}
 				else{
 					//bad 
 					break;
-				}
+				}*/
 			} else if(*cmdList[i] == '|'){
-				printf("Command %s\n",cmdList[i]);
+				//printf("Command %s\n",cmdList[i]);
 				pipe(fd);
 				cpid=fork();
-				printf("Forked child process %d\n",cpid);
-				write(2,cpid,2);
+				//printf("Forked child process %d\n",cpid);
+				//write(2,cpid,2);
 				if(cpid==0){
 					pipeCmd = command;
 					close(fd[1]);
@@ -180,21 +173,25 @@ int fileIO(char * cmd){
 					close(fd[0]);
 					close(1);
 					dup2(fd[1],1);
+					//exec(command);
+					//wait(&status);
 				}
 			} else{
 				strcpy(pipeCmd,cmdList[i]);
 				pipeCmd += strlen(cmdList[i]);
 				*(pipeCmd++) = ' ';
-				printf("Command %s\n",cmdList[i]);
-				printf("Forked child process %d\n",cpid);
-				getc();
+				//printf("Command %s\n",cmdList[i]);
+				//printf("Forked child process %d\n",cpid);
+				//getc();
 			}
 			//cmdList++;
 			i++;
 		}while(cmdList[i] !=0);
 		*(pipeCmd-1) = 0;
-		printf("Exec the command %s\n",*pipeCmd);
+		//printf("Exec the command %s\n",command);
+		//getc();
 		exec(command);
+		exit(&command);
 		return fileOp;
 	
 }

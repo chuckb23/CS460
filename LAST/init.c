@@ -5,7 +5,7 @@ int stdin,stdout;
 main(int argc, char *argv){
 	open("/dev/tty0/",O_RDONLY);
 	open("/dev/tty0/",O_WRONLY);
-	printf("Chucks init: FOrk login taks on console\n");
+	printf("Chucks init: Fork login taks on console\n");
 	child = fork();
 	if(child){
 		childS0 = fork();
@@ -50,7 +50,7 @@ int parent(){
 			if(!childS1)
 				exec("login /dev/ttyS1");
 		}else{
-			printf("INit: Buried an orphan child %d \n",pid);
+			printf("Init: Buried an orphan child %d \n",pid);
 		
 		}
 	}

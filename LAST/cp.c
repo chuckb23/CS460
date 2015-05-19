@@ -2,7 +2,7 @@
 
 int main(int argc, char * argv[]){
 	int readFD,writeFD,bytesRead,totalTD,bytesWrite;
-	char buf[1024];
+	char buf;
 	if(argc<3){
 		printf("CP command not recognizd no destination\n");
 	}
@@ -11,7 +11,7 @@ int main(int argc, char * argv[]){
 		if(readFD>-1){
 				writeFD = open(argv[2],O_WRONLY|O_CREAT);
 				if(writeFD>-1){
-					while(bytesRead=read(readFD,buf,1024)){
+					while(bytesRead=read(readFD,buf,1)){
 						totalTD += bytesRead;
 						bytesWrite = write(writeFD,buf,bytesRead);
 					}
